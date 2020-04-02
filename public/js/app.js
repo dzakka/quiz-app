@@ -2173,15 +2173,79 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api/index.js");
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['useroptions'],
   name: 'game',
   data: function data() {
-    return {};
+    return {
+      totalcount: {},
+      result: {
+        question: '',
+        ans: {}
+      },
+      options: {
+        amount: 5,
+        category: parseInt(this.useroptions.id),
+        difficulty: this.useroptions.dif,
+        type: 'any'
+      },
+      results: {},
+      index: 0,
+      allans: []
+    };
+  },
+  methods: {
+    next: function next() {
+      this.allans = [];
+      this.result.ans = this.allanswers(this.results[this.index]);
+      this.result.question = this.results[this.index].question;
+      this.index++;
+    },
+    allanswers: function allanswers(data) {
+      if (data.type === 'multiple') {
+        this.allans = this.allans.concat(data.incorrect_answers);
+        this.allans.push(data.correct_answer);
+        this.allans = this.shuffle(this.allans);
+        return this.allans;
+      } else {
+        return;
+      }
+    },
+    shuffle: function shuffle(data) {
+      return data.sort(function (data) {
+        return 0.5 - Math.random();
+      });
+    }
   },
   created: function created() {
-    console.log(this.useroptions.id);
-    console.log(this.useroptions.diff);
+    var _this = this;
+
+    opentdb.getTrivia(this.options).then(function (result) {
+      _this.results = result;
+
+      _this.next();
+
+      console.log(_this.results);
+    });
+    opentdb.getQuestionCount(this.options.category).then(function (result) {
+      _this.totalcount = result;
+    });
   }
 });
 
@@ -40257,7 +40321,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(0)
+                return _vm.categoryuser(9)
               }
             }
           },
@@ -40276,7 +40340,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(1)
+                return _vm.categoryuser(10)
               }
             }
           },
@@ -40295,7 +40359,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(2)
+                return _vm.categoryuser(11)
               }
             }
           },
@@ -40314,7 +40378,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(3)
+                return _vm.categoryuser(12)
               }
             }
           },
@@ -40333,7 +40397,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(4)
+                return _vm.categoryuser(13)
               }
             }
           },
@@ -40352,7 +40416,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(5)
+                return _vm.categoryuser(14)
               }
             }
           },
@@ -40377,7 +40441,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(6)
+                return _vm.categoryuser(15)
               }
             }
           },
@@ -40396,7 +40460,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(7)
+                return _vm.categoryuser(16)
               }
             }
           },
@@ -40415,7 +40479,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(8)
+                return _vm.categoryuser(17)
               }
             }
           },
@@ -40434,7 +40498,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(9)
+                return _vm.categoryuser(18)
               }
             }
           },
@@ -40453,7 +40517,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(10)
+                return _vm.categoryuser(19)
               }
             }
           },
@@ -40472,7 +40536,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(11)
+                return _vm.categoryuser(20)
               }
             }
           },
@@ -40497,7 +40561,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(12)
+                return _vm.categoryuser(21)
               }
             }
           },
@@ -40516,7 +40580,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(13)
+                return _vm.categoryuser(22)
               }
             }
           },
@@ -40535,7 +40599,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(14)
+                return _vm.categoryuser(23)
               }
             }
           },
@@ -40554,7 +40618,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(15)
+                return _vm.categoryuser(24)
               }
             }
           },
@@ -40573,7 +40637,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(16)
+                return _vm.categoryuser(25)
               }
             }
           },
@@ -40592,7 +40656,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(17)
+                return _vm.categoryuser(26)
               }
             }
           },
@@ -40617,7 +40681,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(18)
+                return _vm.categoryuser(27)
               }
             }
           },
@@ -40636,7 +40700,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(19)
+                return _vm.categoryuser(28)
               }
             }
           },
@@ -40655,7 +40719,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(20)
+                return _vm.categoryuser(29)
               }
             }
           },
@@ -40674,7 +40738,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(21)
+                return _vm.categoryuser(30)
               }
             }
           },
@@ -40693,7 +40757,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(22)
+                return _vm.categoryuser(31)
               }
             }
           },
@@ -40712,7 +40776,7 @@ var render = function() {
             attrs: { type: "submit" },
             on: {
               click: function($event) {
-                return _vm.categoryuser(23)
+                return _vm.categoryuser(32)
               }
             }
           },
@@ -40838,7 +40902,79 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n        This is a game componenet\n")])
+  return _c("div", [
+    _c("div", [
+      _c(
+        "button",
+        {
+          staticClass: "list-group-item list-group-item-action active",
+          attrs: { type: "button" }
+        },
+        [
+          _vm._v(
+            "\n                " +
+              _vm._s(_vm.result.question) +
+              "\n            "
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "list-group" }, [
+        _c(
+          "button",
+          {
+            staticClass: "list-group-item list-group-item-action",
+            attrs: { type: "button" }
+          },
+          [_vm._v(_vm._s(_vm.result.ans[0]))]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "list-group-item list-group-item-action",
+            attrs: { type: "button" }
+          },
+          [_vm._v(_vm._s(_vm.result.ans[1]))]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "list-group-item list-group-item-action",
+            attrs: { type: "button" }
+          },
+          [_vm._v(_vm._s(_vm.result.ans[2]))]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "list-group-item list-group-item-action",
+            attrs: { type: "button", disabled: "" }
+          },
+          [_vm._v(_vm._s(_vm.result.ans[3]))]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      _c(
+        "button",
+        {
+          staticClass: "button btn-primary",
+          on: {
+            click: function($event) {
+              return _vm.next()
+            }
+          }
+        },
+        [_vm._v("Next Question")]
+      ),
+      _vm._v(" "),
+      _c("button", { staticClass: "button btn-primary" }, [_vm._v("skip")])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

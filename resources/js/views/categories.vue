@@ -2,59 +2,59 @@
     <div>
         <p>text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,</p>
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-royal btn-sm" v-on:click="categoryuser(0)" type="submit">General Knowledge<br>
+            <button class="btn btn-royal btn-sm" v-on:click="categoryuser(9)" type="submit">General Knowledge<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-space btn-sm" v-on:click="categoryuser(1)" type="submit">Boooks <br>
+            <button class="btn btn-space btn-sm" v-on:click="categoryuser(10)" type="submit">Boooks <br>
                  <i class="fas fa-book fa-3x"></i></button>
-            <button class="btn btn-prussian btn-sm" v-on:click="categoryuser(2)" type="submit">Film<br>
+            <button class="btn btn-prussian btn-sm" v-on:click="categoryuser(11)" type="submit">Film<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-navy btn-sm" v-on:click="categoryuser(3)" type="submit">Music<br>
+            <button class="btn btn-navy btn-sm" v-on:click="categoryuser(12)" type="submit">Music<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-yale btn-sm" v-on:click="categoryuser(4)" type="submit">Musicals & Theatres<br>
+            <button class="btn btn-yale btn-sm" v-on:click="categoryuser(13)" type="submit">Musicals & Theatres<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-egyptain btn-sm" v-on:click="categoryuser(5)" type="submit">Television<br>
+            <button class="btn btn-egyptain btn-sm" v-on:click="categoryuser(14)" type="submit">Television<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>   
         </div>       
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-azure btn-sm" v-on:click="categoryuser(6)" type="submit">Video Games<br>
+            <button class="btn btn-azure btn-sm" v-on:click="categoryuser(15)" type="submit">Video Games<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-sapphire btn-sm" v-on:click="categoryuser(7)" type="submit">Board Games<br>
+            <button class="btn btn-sapphire btn-sm" v-on:click="categoryuser(16)" type="submit">Board Games<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-olympic btn-sm" v-on:click="categoryuser(8)" type="submit">Science & Nature<br>
+            <button class="btn btn-olympic btn-sm" v-on:click="categoryuser(17)" type="submit">Science & Nature<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-cornflower btn-sm" v-on:click="categoryuser(9)" type="submit">Computers<br>
+            <button class="btn btn-cornflower btn-sm" v-on:click="categoryuser(18)" type="submit">Computers<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-independence btn-sm" v-on:click="categoryuser(10)" type="submit">Mathematics<br>
+            <button class="btn btn-independence btn-sm" v-on:click="categoryuser(19)" type="submit">Mathematics<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-teal btn-sm" v-on:click="categoryuser(11)" type="submit">Mythology<br>
+            <button class="btn btn-teal btn-sm" v-on:click="categoryuser(20)" type="submit">Mythology<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>   
         </div>     
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-maya btn-sm" v-on:click="categoryuser(12)" type="submit">Sports<br>
+            <button class="btn btn-maya btn-sm" v-on:click="categoryuser(21)" type="submit">Sports<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-pigeon btn-sm" v-on:click="categoryuser(13)" type="submit">Geography<br>
+            <button class="btn btn-pigeon btn-sm" v-on:click="categoryuser(22)" type="submit">Geography<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-turkish btn-sm" v-on:click="categoryuser(14)" type="submit">History<br>
+            <button class="btn btn-turkish btn-sm" v-on:click="categoryuser(23)" type="submit">History<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-carolina btn-sm" v-on:click="categoryuser(15)" type="submit">Politics<br>
+            <button class="btn btn-carolina btn-sm" v-on:click="categoryuser(24)" type="submit">Politics<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-steel btn-sm" v-on:click="categoryuser(16)" type="submit">Art<br>
+            <button class="btn btn-steel btn-sm" v-on:click="categoryuser(25)" type="submit">Art<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-tiffany btn-sm" v-on:click="categoryuser(17)" type="submit">Celebrities<br>
+            <button class="btn btn-tiffany btn-sm" v-on:click="categoryuser(26)" type="submit">Celebrities<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>   
         </div>     
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <button class="btn btn-baby btn-sm" v-on:click="categoryuser(18)" type="submit">Animals<br>
+            <button class="btn btn-baby btn-sm" v-on:click="categoryuser(27)" type="submit">Animals<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-airforce btn-sm" v-on:click="categoryuser(19)" type="submit">Vehicles<br>
+            <button class="btn btn-airforce btn-sm" v-on:click="categoryuser(28)" type="submit">Vehicles<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-electric btn-sm" v-on:click="categoryuser(20)" type="submit"> Comics<br>
+            <button class="btn btn-electric btn-sm" v-on:click="categoryuser(29)" type="submit"> Comics<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-sky btn-sm" v-on:click="categoryuser(21)" type="submit">Gadgets<br>
+            <button class="btn btn-sky btn-sm" v-on:click="categoryuser(30)" type="submit">Gadgets<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-powder btn-sm" v-on:click="categoryuser(22)" type="submit">Japanese Anime & Manga<br>
+            <button class="btn btn-powder btn-sm" v-on:click="categoryuser(31)" type="submit">Japanese Anime & Manga<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-turquoise btn-sm" v-on:click="categoryuser(23)" type="submit">Cartoon & Animations<br>
+            <button class="btn btn-turquoise btn-sm" v-on:click="categoryuser(32)" type="submit">Cartoon & Animations<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>   
         </div>       
     </div>      
