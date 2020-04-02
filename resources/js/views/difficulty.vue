@@ -2,11 +2,11 @@
     <div>
         <p>Choose your difficulty Level</p>
         <div class="d-flex justify-content-center align-items-center mt-4">
-            <button class="btn btn-baby btn-md mr-5" v-on:click="getdifficulty('easy')" type="submit">Animals<br>
+            <button class="btn btn-baby btn-md mr-5" v-on:click="getdifficulty('easy')" type="submit">Easy<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-airforce btn-md mr-5" v-on:click="getdifficulty('medium')" type="submit">Vehicles<br>
+            <button class="btn btn-airforce btn-md mr-5" v-on:click="getdifficulty('medium')" type="submit">Medium<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
-            <button class="btn btn-electric btn-md" v-on:click="getdifficulty('hard')" type="submit"> Comics<br>
+            <button class="btn btn-electric btn-md" v-on:click="getdifficulty('hard')" type="submit"> Hard<br>
                  <i class="fas fa-book-reader fa-3x"></i></button>
         </div>        
 

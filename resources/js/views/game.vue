@@ -1,20 +1,42 @@
 <template>
     <div>
-         <div>
-            <button type="button" class="list-group-item list-group-item-action active">
-                    {{result.question}}
-                </button>
-          <div class="list-group">
-                <button type="button" class="list-group-item list-group-item-action">{{result.ans[0]}}</button>
-                <button type="button" class="list-group-item list-group-item-action">{{result.ans[1]}}</button>
-                <button type="button" class="list-group-item list-group-item-action">{{result.ans[2]}}</button>
-                <button type="button" class="list-group-item list-group-item-action" disabled>{{result.ans[3]}}</button>
-         </div>      
-        </div> 
-        <div>
-            <button v-on:click="next()" class="button btn-primary">Next Question</button>
-            <button class="button btn-primary">skip</button>
-        </div>
+        <div v-if="!gameover">
+            <div>
+               <p>score:{{counter}}</p>
+
+            </div>    
+            <div v-if="len>2">
+                <button type="button" class="list-group-item list-group-item-action active">
+                        {{result.question}}
+                    </button>
+                <div class="list-group">
+                    <button type="button" v-on:click="score(result.ans[0])" class="list-group-item list-group-item-action">{{result.ans[0]}}</button>
+                    <button type="button" v-on:click="score(result.ans[1])" class="list-group-item list-group-item-action">{{result.ans[1]}}</button>
+                    <button type="button" v-on:click="score(result.ans[2])" class="list-group-item list-group-item-action">{{result.ans[2]}}</button>
+                    <button type="button" v-on:click="score(result.ans[3])" class="list-group-item list-group-item-action">{{result.ans[3]}}</button>
+                </div>      
+            </div> 
+            <div v-else>
+                <button type="button" class="list-group-item list-group-item-action active">
+                        {{result.question}}
+                    </button>
+            <div class="list-group">
+                    <button type="button"  v-on:click="score(result.ans[0])" class="list-group-item list-group-item-action">{{result.ans[0]}}</button>
+                    <button type="button"  v-on:click="score(result.ans[1])" class="list-group-item list-group-item-action">{{result.ans[1]}}</button>
+            </div>  
+            </div>    
+            <div v-if ="index === options.amount">
+                <p>This is the last question</p>
+                <button v-on:click="skip(result)" class="button btn-primary">Skip</button>
+            </div>
+            <div v-else>
+                <button v-on:click="next()" class="button btn-primary">Next Question</button>
+                <button v-on:click="skip()" class="button btn-primary">Skip</button>
+            </div>
+        </div>    
+        <div v-else>
+            <p>Your score is {{counter}}</p>
+        </div>    
     </div>
 </template>
 
@@ -25,11 +47,9 @@ export default {
  name: 'game',
  data(){
      return{
-         totalcount:{},
          result:{
              question:'',
              ans:{
-
              }
          },
         options :{
@@ -39,36 +59,73 @@ export default {
             type: 'any'
         },
         results:{},
+        skippedquestions:[],
         index:0,
-        allans:[]
-
+        allans:[],
+        len:'',
+        correct:'',
+        counter:0,
+        gameover:0,
+        skippedid:''
      }                                                                                                                                                                                                                                                                                                                                                                                                  
  },
  methods:{
      next(){
          this.allans =[];
+         this.len =0;
         this.result.ans = this.allanswers(this.results[this.index]);
         this.result.question = this.results[this.index].question;
         this.index++;
-        
      },
      allanswers(data){
         if(data.type === 'multiple') {
         this.allans  = this.allans.concat(data.incorrect_answers);
         this.allans.push(data.correct_answer);
+        this.correct = data.correct_answer;
         this.allans = this.shuffle(this.allans);
+        this.len =4;
         return this.allans;
-        
         }
          else{
-             return;
+             this.len =2;
+              this.correct = data.correct_answer;
+              this.allans  = this.allans.concat(data.incorrect_answers);
+              this.allans.push(data.correct_answer);
+              return this.allans;
          }
     },
     shuffle(data){
         return data.sort((data)=>0.5- Math.random());
+    },
+    skip(){
+        
+        this.skippedquestions.push(this.index-1);
+        console.log(this.skippedquestions);
+        if(this.index != this.options.amount){ 
+               this.next();
+            }else{
+                this.gameover =1;
+            }
+    },
+    score(data){
+        if((data === this.correct)){
+           this.counter++;
+           if(this.index != this.options.amount){
+               this.next();
+           }else{
+
+               this.gameover =1;
+           }
+           
+        }else{
+            if(this.index != this.options.amount){
+               this.next();
+            }else{
+                this.gameover =1;
+            }
+        }
 
     }
-
 
  },
 created(){
@@ -86,3 +143,10 @@ opentdb.getQuestionCount(this.options.category)
 
 }
 </script>
+
+
+<style  lang="scss" scoped>
+
+
+
+</style>
