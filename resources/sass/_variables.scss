@@ -1,0 +1,38 @@
+$theme-colors: (
+  "primary": #004d4d,
+  "royal" : #111E6C,
+  "space":#1D2951,
+  "prussian": #003152,
+  "navy":#000080,
+  "yale":#0E4D92,
+  "egyptain": #1034A6,
+  "azure":#0080FF,
+  "sapphire":#0F52BA,
+  "olympic":#008ECC,
+  "cornflower":#6593F5,
+  "independence":#4c516d,
+  "teal":#008081,
+  "maya" : #73c2fb,
+  "pigeon" : #7285A5,
+  "turkish": #4f97a3,
+  "carolina": #57a0d3,
+  "steel" :#4682b4,
+  "tiffany": #81d8d0,
+  "baby": #89cff0,
+  "airforce": #588bae,
+  "electric" : #7ef9ff,
+  "sky": #95c8d8,
+  "powder": #b0dfe5,
+  "turquoise":#3fe0d0,
+);
+
+//nav-bar editing
+.navbar-light {
+    .navbar-brand {
+      color: white !important;
+  
+    }
+}
+.nav-link{
+    color:white !important;
+}
