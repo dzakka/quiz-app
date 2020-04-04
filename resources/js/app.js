@@ -27,22 +27,22 @@ const router = new VueRouter({
             component: categories
         },
         {
-            path:'/difficulty/:categoryid',
-            name:'difficulty',
+            path: '/difficulty/:categoryid',
+            name: 'difficulty',
             component: difficulty,
-            props:true
+            props: true
         },
         {
-            path:'/difficulty/:useroptions',
-            name:'game',
+            path: '/difficulty/:useroptions',
+            name: 'game',
             component: game,
-            props:true
+            props: true
         },
         {
-            path:'/skipped',
-            name:'skippedquestions',
+            path: '/skipped',
+            name: 'skippedquestions',
             component: skippedquestions,
-            props:true
+            props: true
         },
     ],
 });

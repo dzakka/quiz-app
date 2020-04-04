@@ -2212,38 +2212,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['useroptions'],
-  name: 'game',
+  props: ["useroptions"],
+  name: "game",
   components: {
     skippedquestions: _skippedquestions__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
       result: {
-        question: '',
+        question: "",
         ans: {}
       },
       options: {
         amount: 5,
         category: parseInt(this.useroptions.id),
         difficulty: this.useroptions.dif,
-        type: 'any'
+        type: "any"
       },
       results: {},
       skippedquestions: [],
       index: 0,
       allans: [],
-      len: '',
-      correct: '',
+      len: "",
+      correct: "",
       counter: 0,
       gameover: 0,
-      skippedid: ''
+      skippedid: "",
+      daniel: false
     };
   },
   methods: {
@@ -2255,7 +2285,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       this.index++;
     },
     allanswers: function allanswers(data) {
-      if (data.type === 'multiple') {
+      if (data.type === "multiple") {
         this.allans = this.allans.concat(data.incorrect_answers);
         this.allans.push(data.correct_answer);
         this.correct = data.correct_answer;
@@ -2302,30 +2332,27 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       }
     },
     repeat: function repeat() {
-      var _this = this;
-
-      _app__WEBPACK_IMPORTED_MODULE_1__["bus"].$emit('daniel', {
-        'allquestions': this.results,
-        'skippedques': this.skippedquestions
+      _app__WEBPACK_IMPORTED_MODULE_1__["bus"].$emit("daniel", {
+        allquestions: this.results,
+        skippedques: this.skippedquestions,
+        scoregame: this.counter
       });
-      _app__WEBPACK_IMPORTED_MODULE_1__["bus"].$on('allskip', function (data) {
-        _this.results = data;
-        next();
-        console.log(_this.results);
-      });
+      this.daniel = true;
+      console.log(this.results);
     }
   },
   created: function created() {
-    var _this2 = this;
+    var _this = this;
 
     opentdb.getTrivia(this.options).then(function (result) {
-      _this2.results = result;
+      _this.results = result;
+      _this.round = 0;
 
-      _this2.next(); //console.log(this.results);
+      _this.next(); //console.log(this.results);
 
     });
     opentdb.getQuestionCount(this.options.category).then(function (result) {
-      _this2.totalcount = result;
+      _this.totalcount = result;
     });
   }
 });
@@ -2348,36 +2375,157 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'skippedquestions',
+  name: "skippedquestions",
   data: function data() {
     return {
+      result: {
+        question: "",
+        ans: {}
+      },
       allquestions: [],
       skipques: {},
       allskip: [],
       allskipback: {},
-      peopleObject: {}
+      peopleObject: {},
+      results: {},
+      skippedquestions: [],
+      index: 0,
+      allans: [],
+      len: "",
+      correct: "",
+      counter: "",
+      gameover: 0,
+      skippedid: "",
+      round: ""
     };
   },
   created: function created() {
     var _this = this;
 
-    _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$on('daniel', function (data) {
+    _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$on("daniel", function (data) {
       _this.allquestions = Object.entries(data.allquestions).map(function (e) {
         return e[1];
       });
       _this.skipques = data.skippedques;
+      _this.counter = data.scoregame;
 
       for (var i = 0; i < _this.skipques.length; i++) {
         _this.allskip.push(_this.allquestions[_this.skipques[i]]);
-      } //console.log(this.allskip);
+      }
 
+      _this.results = _this.allskip;
+      _this.round = 1;
 
-      _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$emit('allskip', _this.allskip);
+      _this.next();
     });
   },
-  methods: {}
+  methods: {
+    next: function next() {
+      this.allans = [];
+      this.len = 0;
+      this.result.ans = this.allanswers(this.results[this.index]);
+      this.result.question = this.results[this.index].question;
+      this.index++;
+    },
+    allanswers: function allanswers(data) {
+      if (data.type === "multiple") {
+        this.allans = this.allans.concat(data.incorrect_answers);
+        this.allans.push(data.correct_answer);
+        this.correct = data.correct_answer;
+        this.allans = this.shuffle(this.allans);
+        this.len = 4;
+        return this.allans;
+      } else {
+        this.len = 2;
+        this.correct = data.correct_answer;
+        this.allans = this.allans.concat(data.incorrect_answers);
+        this.allans.push(data.correct_answer);
+        return this.allans;
+      }
+    },
+    shuffle: function shuffle(data) {
+      return data.sort(function (data) {
+        return 0.5 - Math.random();
+      });
+    },
+    skip: function skip() {
+      this.skippedquestions.push(this.index - 1);
+
+      if (this.index != this.options.amount) {
+        this.next();
+      } else {
+        this.gameover = 1;
+      }
+    },
+    score: function score(data) {
+      if (data === this.correct) {
+        this.counter++;
+
+        if (this.index != this.skipques.length) {
+          this.next();
+        } else {
+          this.gameover = 1;
+        }
+      } else {
+        if (this.index != this.skipques.length) {
+          this.next();
+        } else {
+          this.gameover = 1;
+        }
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -41009,11 +41157,8 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("skippedquestions"),
-      _vm._v(" "),
+  return _c("div", [
+    _c("div", [
       !_vm.gameover
         ? _c("div", [
             _c("div", [_c("p", [_vm._v("score:" + _vm._s(_vm.counter))])]),
@@ -41027,13 +41172,7 @@ var render = function() {
                         "list-group-item list-group-item-action active",
                       attrs: { type: "button" }
                     },
-                    [
-                      _vm._v(
-                        "\n                    " +
-                          _vm._s(_vm.result.question) +
-                          "\n                "
-                      )
-                    ]
+                    [_vm._v(_vm._s(_vm.result.question))]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "list-group" }, [
@@ -41102,13 +41241,7 @@ var render = function() {
                         "list-group-item list-group-item-action active",
                       attrs: { type: "button" }
                     },
-                    [
-                      _vm._v(
-                        "\n                    " +
-                          _vm._s(_vm.result.question) +
-                          "\n                "
-                      )
-                    ]
+                    [_vm._v(_vm._s(_vm.result.question))]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "list-group" }, [
@@ -41185,7 +41318,7 @@ var render = function() {
                   )
                 ])
           ])
-        : _c("div", [
+        : _c("div", { class: { hide: _vm.daniel } }, [
             _c(
               "button",
               {
@@ -41200,9 +41333,10 @@ var render = function() {
             _vm._v(" "),
             _c("p", [_vm._v("Your score is " + _vm._s(_vm.counter))])
           ])
-    ],
-    1
-  )
+    ]),
+    _vm._v(" "),
+    _c("div", [_c("skippedquestions")], 1)
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -41226,7 +41360,125 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _vm.round
+      ? _c("div", [
+          _vm.len > 2
+            ? _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "list-group-item list-group-item-action active",
+                    attrs: { type: "button" }
+                  },
+                  [_vm._v(_vm._s(_vm.result.question))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "list-group" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.score(_vm.result.ans[0])
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.result.ans[0]))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.score(_vm.result.ans[1])
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.result.ans[1]))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.score(_vm.result.ans[2])
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.result.ans[2]))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.score(_vm.result.ans[3])
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.result.ans[3]))]
+                  )
+                ])
+              ])
+            : _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "list-group-item list-group-item-action active",
+                    attrs: { type: "button" }
+                  },
+                  [_vm._v(_vm._s(_vm.result.question))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "list-group" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.score(_vm.result.ans[0])
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.result.ans[0]))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.score(_vm.result.ans[1])
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.result.ans[1]))]
+                  )
+                ])
+              ]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Your score skip is " + _vm._s(_vm.counter))])
+        ])
+      : _c("div")
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

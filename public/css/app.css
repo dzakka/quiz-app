@@ -21041,3 +21041,7 @@ a.text-turquoise:focus {
   }
 }
 
+.hide {
+  display: none;
+}
+
