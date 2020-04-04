@@ -12,11 +12,11 @@ Vue.use(VueRouter)
 export const bus = new Vue();
 
 import App from './views/App'
-import Hello from './views/Hello'
 import Home from './views/Home'
 import categories from './views/categories'
 import difficulty from './views/difficulty'
 import game from './views/game'
+import skippedquestions from './views/skippedquestions'
 
 const router = new VueRouter({
     mode: 'history',
@@ -25,11 +25,6 @@ const router = new VueRouter({
             path: '/',
             name: 'categories',
             component: categories
-        },
-        {
-            path: '/hello',
-            name: 'hello',
-            component: Hello,
         },
         {
             path:'/difficulty/:categoryid',
@@ -42,13 +37,20 @@ const router = new VueRouter({
             name:'game',
             component: game,
             props:true
-        }
+        },
+        {
+            path:'/skipped',
+            name:'skippedquestions',
+            component: skippedquestions,
+            props:true
+        },
     ],
 });
 
 
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

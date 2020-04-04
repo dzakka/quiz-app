@@ -1,5 +1,6 @@
 <template>
     <div>
+        <skippedquestions></skippedquestions>
         <div v-if="!gameover">
             <div>
                <p>score:{{counter}}</p>
@@ -26,7 +27,6 @@
             </div>  
             </div>    
             <div v-if ="index === options.amount">
-                <p>This is the last question</p>
                 <button v-on:click="skip(result)" class="button btn-primary">Skip</button>
             </div>
             <div v-else>
@@ -35,16 +35,23 @@
             </div>
         </div>    
         <div v-else>
+            <button v-on:click="repeat()">Repeat the skipped questions</button>
             <p>Your score is {{counter}}</p>
         </div>    
     </div>
 </template>
 
 <script>
+import skippedquestions from './skippedquestions';
+import {bus} from '../app'
 const opentdb = require('opentdb-api');
+
 export default {
     props :['useroptions'],
- name: 'game',
+    name: 'game',
+    components:{
+     skippedquestions
+ },
  data(){
      return{
          result:{
@@ -100,7 +107,6 @@ export default {
     skip(){
         
         this.skippedquestions.push(this.index-1);
-        console.log(this.skippedquestions);
         if(this.index != this.options.amount){ 
                this.next();
             }else{
@@ -113,7 +119,6 @@ export default {
            if(this.index != this.options.amount){
                this.next();
            }else{
-
                this.gameover =1;
            }
            
@@ -124,20 +129,31 @@ export default {
                 this.gameover =1;
             }
         }
-
+    },
+    repeat(){
+        bus.$emit('daniel',{
+            'allquestions':this.results,
+            'skippedques':this.skippedquestions
+        });
+        bus.$on('allskip',(data)=>{
+            this.results = data;
+            next();
+            console.log(this.results);
+        })
     }
-
  },
 created(){
  opentdb.getTrivia(this.options).then(result => {
    this.results = result;
    this.next();
-   console.log(this.results);
+   //console.log(this.results);
  });
 opentdb.getQuestionCount(this.options.category)
 .then(result =>{
     this.totalcount = result
 });
+
+
 }
 
 
