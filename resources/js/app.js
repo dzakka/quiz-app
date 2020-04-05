@@ -17,6 +17,9 @@ import categories from './views/categories'
 import difficulty from './views/difficulty'
 import game from './views/game'
 import skippedquestions from './views/skippedquestions'
+import test from './views/test.vue'
+import timer from './views/timer'
+import hello from './views/hello'
 
 const router = new VueRouter({
     mode: 'history',
@@ -42,6 +45,24 @@ const router = new VueRouter({
             path: '/skipped',
             name: 'skippedquestions',
             component: skippedquestions,
+            props: true
+        },
+        {
+            path: '/test',
+            name: 'test',
+            component: test,
+            props: true
+        },
+        {
+            path: '/timer',
+            name: 'timer',
+            component: timer,
+            props: true
+        },
+        {
+            path: '/hello',
+            name: 'hello',
+            component: hello,
             props: true
         },
     ],
