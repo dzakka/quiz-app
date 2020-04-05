@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="!showthebutton">
       <div v-if="!gameover">
         <div>
           <p>score:{{counter}}</p>
@@ -60,13 +60,17 @@
         </div>
       </div>
       <div v-else v-bind:class="{hide:daniel}">
-        <button v-on:click="repeat()">Repeat the skipped questions</button>
+        <!-- <button v-on:click="repeat()">Repeat the skipped questions</button> -->
         <p>Your score is {{counter}}</p>
       </div>
     </div>
-    <div>
-      <skippedquestions></skippedquestions>
-    </div>  
+    <div v-else>
+      <skippedquestions
+        :allques="this.results"
+        :skipindex="skippedquestionz"
+        :scorefromgame="counter"
+      ></skippedquestions>
+    </div>
   </div>
 </template>
 
@@ -94,7 +98,7 @@ export default {
         type: "any"
       },
       results: {},
-      skippedquestions: [],
+      skippedquestionz: [],
       index: 0,
       allans: [],
       len: "",
@@ -102,7 +106,10 @@ export default {
       counter: 0,
       gameover: 0,
       skippedid: "",
-      daniel:false,
+      daniel: false,
+      transfer: 0,
+      skipround: 0,
+      showthebutton: 0
     };
   },
   methods: {
@@ -133,8 +140,8 @@ export default {
       return data.sort(data => 0.5 - Math.random());
     },
     skip() {
-      this.skippedquestions.push(this.index - 1);
-      if (this.index != this.options.amount) {
+      this.skippedquestionz.push(this.index - 1);
+      if (this.index != this.results.length) {
         this.next();
       } else {
         this.gameover = 1;
@@ -143,36 +150,40 @@ export default {
     score(data) {
       if (data === this.correct) {
         this.counter++;
-        if (this.index != this.options.amount) {
+        if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
+          this.showthebutton = 1;
         }
       } else {
-        if (this.index != this.options.amount) {
+        if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
+          this.showthebutton = 1;
         }
       }
-    },
-    repeat() {
-         bus.$emit("daniel", 
-         {
-            allquestions: this.results,
-            skippedques: this.skippedquestions,
-            scoregame: this.counter,
-        });
-        this.daniel = true;
-          console.log(this.results);
     }
   },
+
   created() {
     opentdb.getTrivia(this.options).then(result => {
+      bus.$on("skippedquesfinal", data => {
+        if (data) {
+          this.results = data;
+          this.showthebutton = 0;
+          console.log(this.results);
+          this.gameover = 0;
+          this.index = 0;
+          this.next();
+        }
+      });
       this.results = result;
-      this.round=0;
+      this.round = 0;
       this.next();
-      //console.log(this.results);
+
+      // console.log(this.results);
     });
     opentdb.getQuestionCount(this.options.category).then(result => {
       this.totalcount = result;

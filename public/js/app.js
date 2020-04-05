@@ -2241,6 +2241,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2265,7 +2269,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         type: "any"
       },
       results: {},
-      skippedquestions: [],
+      skippedquestionz: [],
       index: 0,
       allans: [],
       len: "",
@@ -2273,7 +2277,10 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       counter: 0,
       gameover: 0,
       skippedid: "",
-      daniel: false
+      daniel: false,
+      transfer: 0,
+      skipround: 0,
+      showthebutton: 0
     };
   },
   methods: {
@@ -2306,9 +2313,9 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       });
     },
     skip: function skip() {
-      this.skippedquestions.push(this.index - 1);
+      this.skippedquestionz.push(this.index - 1);
 
-      if (this.index != this.options.amount) {
+      if (this.index != this.results.length) {
         this.next();
       } else {
         this.gameover = 1;
@@ -2318,37 +2325,41 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       if (data === this.correct) {
         this.counter++;
 
-        if (this.index != this.options.amount) {
+        if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
+          this.showthebutton = 1;
         }
       } else {
-        if (this.index != this.options.amount) {
+        if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
+          this.showthebutton = 1;
         }
       }
-    },
-    repeat: function repeat() {
-      _app__WEBPACK_IMPORTED_MODULE_1__["bus"].$emit("daniel", {
-        allquestions: this.results,
-        skippedques: this.skippedquestions,
-        scoregame: this.counter
-      });
-      this.daniel = true;
-      console.log(this.results);
     }
   },
   created: function created() {
     var _this = this;
 
     opentdb.getTrivia(this.options).then(function (result) {
+      _app__WEBPACK_IMPORTED_MODULE_1__["bus"].$on("skippedquesfinal", function (data) {
+        if (data) {
+          _this.results = data;
+          _this.showthebutton = 0;
+          console.log(_this.results);
+          _this.gameover = 0;
+          _this.index = 0;
+
+          _this.next();
+        }
+      });
       _this.results = result;
       _this.round = 0;
 
-      _this.next(); //console.log(this.results);
+      _this.next(); // console.log(this.results);
 
     });
     opentdb.getQuestionCount(this.options.category).then(function (result) {
@@ -2379,24 +2390,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'hello',
+  name: "hello",
   //props:['ctoparent'],
   components: {
     test: _test__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      tochild: 'This is a text from parent(hello comp) to child(test comp)',
-      daniel: ''
+      tochild: "This is a text from parent(hello comp) to child(test comp)",
+      daniel: ""
     };
   },
   created: function created() {
     var _this = this;
 
-    _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$on('ctoparent', function (data) {
+    _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$on("ctoparent", function (data) {
       _this.daniel = data;
     });
   },
@@ -2419,161 +2432,41 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app */ "./resources/js/app.js");
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./resources/js/views/game.vue");
 //
 //
 //
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "skippedquestions",
+  props: ["allques", "skipindex", "scorefromgame"],
   data: function data() {
     return {
-      result: {
-        question: "",
-        ans: {}
-      },
+      allskip: [],
       allquestions: [],
       skipques: {},
-      allskip: [],
-      allskipback: {},
-      peopleObject: {},
-      results: {},
-      skippedquestions: [],
-      index: 0,
-      allans: [],
-      len: "",
-      correct: "",
-      counter: "",
-      gameover: 0,
-      skippedid: "",
-      round: ""
+      counter: ""
     };
   },
-  created: function created() {
-    var _this = this;
-
-    _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$on("daniel", function (data) {
-      _this.allquestions = Object.entries(data.allquestions).map(function (e) {
+  created: function created() {},
+  methods: {
+    playagain: function playagain() {
+      this.allquestions = Object.entries(this.allques).map(function (e) {
         return e[1];
       });
-      _this.skipques = data.skippedques;
-      _this.counter = data.scoregame;
+      this.skipques = this.skipindex;
+      this.counter = this.scorefromgame;
 
-      for (var i = 0; i < _this.skipques.length; i++) {
-        _this.allskip.push(_this.allquestions[_this.skipques[i]]);
-      }
+      for (var i = 0; i < this.skipques.length; i++) {
+        this.allskip.push(this.allquestions[this.skipques[i]]);
+      } //console.log(this.allskip);
 
-      _this.results = _this.allskip;
-      _this.round = 1;
 
-      _this.next();
-    });
-  },
-  methods: {
-    next: function next() {
-      this.allans = [];
-      this.len = 0;
-      this.result.ans = this.allanswers(this.results[this.index]);
-      this.result.question = this.results[this.index].question;
-      this.index++;
-    },
-    allanswers: function allanswers(data) {
-      if (data.type === "multiple") {
-        this.allans = this.allans.concat(data.incorrect_answers);
-        this.allans.push(data.correct_answer);
-        this.correct = data.correct_answer;
-        this.allans = this.shuffle(this.allans);
-        this.len = 4;
-        return this.allans;
-      } else {
-        this.len = 2;
-        this.correct = data.correct_answer;
-        this.allans = this.allans.concat(data.incorrect_answers);
-        this.allans.push(data.correct_answer);
-        return this.allans;
-      }
-    },
-    shuffle: function shuffle(data) {
-      return data.sort(function (data) {
-        return 0.5 - Math.random();
-      });
-    },
-    skip: function skip() {
-      this.skippedquestions.push(this.index - 1);
-
-      if (this.index != this.options.amount) {
-        this.next();
-      } else {
-        this.gameover = 1;
-      }
-    },
-    score: function score(data) {
-      if (data === this.correct) {
-        this.counter++;
-
-        if (this.index != this.skipques.length) {
-          this.next();
-        } else {
-          this.gameover = 1;
-        }
-      } else {
-        if (this.index != this.skipques.length) {
-          this.next();
-        } else {
-          this.gameover = 1;
-        }
-      }
+      _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$emit("skippedquesfinal", this.allskip);
     }
   }
 });
@@ -2601,11 +2494,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'test',
-  props: ['par', 'ptochild'],
+  name: "test",
+  props: ["par", "ptochild"],
   data: function data() {
     return {
-      txt: 'text from child to parent and it worked'
+      txt: "text from child to parent and it worked"
     };
   },
   methods: {
@@ -41285,184 +41178,190 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", [
-      !_vm.gameover
-        ? _c("div", [
-            _c("div", [_c("p", [_vm._v("score:" + _vm._s(_vm.counter))])]),
-            _vm._v(" "),
-            _vm.len > 2
-              ? _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "list-group-item list-group-item-action active",
-                      attrs: { type: "button" }
-                    },
-                    [_vm._v(_vm._s(_vm.result.question))]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "list-group" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "list-group-item list-group-item-action",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.score(_vm.result.ans[0])
+    !_vm.showthebutton
+      ? _c("div", [
+          !_vm.gameover
+            ? _c("div", [
+                _c("div", [_c("p", [_vm._v("score:" + _vm._s(_vm.counter))])]),
+                _vm._v(" "),
+                _vm.len > 2
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "list-group-item list-group-item-action active",
+                          attrs: { type: "button" }
+                        },
+                        [_vm._v(_vm._s(_vm.result.question))]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "list-group" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[0])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[0]))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[1])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[1]))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[2])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[2]))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[3])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[3]))]
+                        )
+                      ])
+                    ])
+                  : _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "list-group-item list-group-item-action active",
+                          attrs: { type: "button" }
+                        },
+                        [_vm._v(_vm._s(_vm.result.question))]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "list-group" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[0])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[0]))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[1])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[1]))]
+                        )
+                      ])
+                    ]),
+                _vm._v(" "),
+                _vm.index === _vm.options.amount
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.skip(_vm.result)
+                            }
                           }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.result.ans[0]))]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "list-group-item list-group-item-action",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.score(_vm.result.ans[1])
+                        },
+                        [_vm._v("Skip")]
+                      )
+                    ])
+                  : _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.next()
+                            }
                           }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.result.ans[1]))]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "list-group-item list-group-item-action",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.score(_vm.result.ans[2])
+                        },
+                        [_vm._v("Next Question")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.skip()
+                            }
                           }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.result.ans[2]))]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "list-group-item list-group-item-action",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.score(_vm.result.ans[3])
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.result.ans[3]))]
-                    )
-                  ])
-                ])
-              : _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "list-group-item list-group-item-action active",
-                      attrs: { type: "button" }
-                    },
-                    [_vm._v(_vm._s(_vm.result.question))]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "list-group" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "list-group-item list-group-item-action",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.score(_vm.result.ans[0])
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.result.ans[0]))]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "list-group-item list-group-item-action",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.score(_vm.result.ans[1])
-                          }
-                        }
-                      },
-                      [_vm._v(_vm._s(_vm.result.ans[1]))]
-                    )
-                  ])
-                ]),
-            _vm._v(" "),
-            _vm.index === _vm.options.amount
-              ? _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "button btn-primary",
-                      on: {
-                        click: function($event) {
-                          return _vm.skip(_vm.result)
-                        }
-                      }
-                    },
-                    [_vm._v("Skip")]
-                  )
-                ])
-              : _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "button btn-primary",
-                      on: {
-                        click: function($event) {
-                          return _vm.next()
-                        }
-                      }
-                    },
-                    [_vm._v("Next Question")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "button btn-primary",
-                      on: {
-                        click: function($event) {
-                          return _vm.skip()
-                        }
-                      }
-                    },
-                    [_vm._v("Skip")]
-                  )
-                ])
-          ])
-        : _c("div", { class: { hide: _vm.daniel } }, [
-            _c(
-              "button",
-              {
-                on: {
-                  click: function($event) {
-                    return _vm.repeat()
-                  }
-                }
-              },
-              [_vm._v("Repeat the skipped questions")]
-            ),
-            _vm._v(" "),
-            _c("p", [_vm._v("Your score is " + _vm._s(_vm.counter))])
-          ])
-    ]),
-    _vm._v(" "),
-    _c("div", [_c("skippedquestions")], 1)
+                        },
+                        [_vm._v("Skip")]
+                      )
+                    ])
+              ])
+            : _c("div", { class: { hide: _vm.daniel } }, [
+                _c("p", [_vm._v("Your score is " + _vm._s(_vm.counter))])
+              ])
+        ])
+      : _c(
+          "div",
+          [
+            _c("skippedquestions", {
+              attrs: {
+                allques: this.results,
+                skipindex: _vm.skippedquestionz,
+                scorefromgame: _vm.counter
+              }
+            })
+          ],
+          1
+        )
   ])
 }
 var staticRenderFns = []
@@ -41507,7 +41406,7 @@ var render = function() {
         },
         [
           _vm._v(
-            "talk to child component from parent(hello) via  props alwasy thorugh custom comp"
+            "talk to child component from parent(hello) via props alwasy thorugh custom comp"
           )
         ]
       )
@@ -41538,123 +41437,17 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.round
-      ? _c("div", [
-          _vm.len > 2
-            ? _c("div", [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "list-group-item list-group-item-action active",
-                    attrs: { type: "button" }
-                  },
-                  [_vm._v(_vm._s(_vm.result.question))]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "list-group" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "list-group-item list-group-item-action",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.score(_vm.result.ans[0])
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.result.ans[0]))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "list-group-item list-group-item-action",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.score(_vm.result.ans[1])
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.result.ans[1]))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "list-group-item list-group-item-action",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.score(_vm.result.ans[2])
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.result.ans[2]))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "list-group-item list-group-item-action",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.score(_vm.result.ans[3])
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.result.ans[3]))]
-                  )
-                ])
-              ])
-            : _c("div", [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "list-group-item list-group-item-action active",
-                    attrs: { type: "button" }
-                  },
-                  [_vm._v(_vm._s(_vm.result.question))]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "list-group" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "list-group-item list-group-item-action",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.score(_vm.result.ans[0])
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.result.ans[0]))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "list-group-item list-group-item-action",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.score(_vm.result.ans[1])
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.result.ans[1]))]
-                  )
-                ])
-              ]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Your score skip is " + _vm._s(_vm.counter))])
-        ])
-      : _c("div")
+    _c(
+      "button",
+      {
+        on: {
+          click: function($event) {
+            return _vm.playagain()
+          }
+        }
+      },
+      [_vm._v("Do you want to play the skipped questions")]
+    )
   ])
 }
 var staticRenderFns = []
