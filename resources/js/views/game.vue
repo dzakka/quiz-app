@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div id="main-div-game">
     <div v-if="!showthebutton">
-      <div v-if="!gameover">
+      <div v-if="!gameover || playedskipped === 1">
         <div>
           <p>score:{{counter}}</p>
         </div>
@@ -51,7 +51,7 @@
             >{{result.ans[1]}}</button>
           </div>
         </div>
-        <div v-if="index === options.amount">
+        <div v-if="index === results.length">
           <button v-on:click="skip(result)" class="button btn-primary">Skip</button>
         </div>
         <div v-else>
@@ -60,17 +60,19 @@
         </div>
       </div>
       <div v-else v-bind:class="{hide:daniel}">
-        <!-- <button v-on:click="repeat()">Repeat the skipped questions</button> -->
-        <p>Your score is {{counter}}</p>
+        
       </div>
     </div>
-    <div v-else>
+    <div v-else-if ="showthebutton && playedskipped === 0" >
       <skippedquestions
         :allques="this.results"
         :skipindex="skippedquestionz"
         :scorefromgame="counter"
       ></skippedquestions>
     </div>
+    <div v-else>
+      <p>Your final score is  {{counter}}</p>
+    </div>  
   </div>
 </template>
 
@@ -105,11 +107,10 @@ export default {
       correct: "",
       counter: 0,
       gameover: 0,
-      skippedid: "",
       daniel: false,
       transfer: 0,
-      skipround: 0,
-      showthebutton: 0
+      showthebutton: 0,
+      playedskipped:0
     };
   },
   methods: {
@@ -145,6 +146,7 @@ export default {
         this.next();
       } else {
         this.gameover = 1;
+        this.showthebutton = 1;
       }
     },
     score(data) {
@@ -172,6 +174,7 @@ export default {
       bus.$on("skippedquesfinal", data => {
         if (data) {
           this.results = data;
+          this.playedskipped =1;
           this.showthebutton = 0;
           console.log(this.results);
           this.gameover = 0;

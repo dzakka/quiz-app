@@ -2245,6 +2245,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -2276,11 +2278,10 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       correct: "",
       counter: 0,
       gameover: 0,
-      skippedid: "",
       daniel: false,
       transfer: 0,
-      skipround: 0,
-      showthebutton: 0
+      showthebutton: 0,
+      playedskipped: 0
     };
   },
   methods: {
@@ -2319,6 +2320,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         this.next();
       } else {
         this.gameover = 1;
+        this.showthebutton = 1;
       }
     },
     score: function score(data) {
@@ -2348,6 +2350,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       _app__WEBPACK_IMPORTED_MODULE_1__["bus"].$on("skippedquesfinal", function (data) {
         if (data) {
           _this.results = data;
+          _this.playedskipped = 1;
           _this.showthebutton = 0;
           console.log(_this.results);
           _this.gameover = 0;
@@ -41177,10 +41180,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { attrs: { id: "main-div-game" } }, [
     !_vm.showthebutton
       ? _c("div", [
-          !_vm.gameover
+          !_vm.gameover || _vm.playedskipped === 1
             ? _c("div", [
                 _c("div", [_c("p", [_vm._v("score:" + _vm._s(_vm.counter))])]),
                 _vm._v(" "),
@@ -41302,7 +41305,7 @@ var render = function() {
                       ])
                     ]),
                 _vm._v(" "),
-                _vm.index === _vm.options.amount
+                _vm.index === _vm.results.length
                   ? _c("div", [
                       _c(
                         "button",
@@ -41345,11 +41348,10 @@ var render = function() {
                       )
                     ])
               ])
-            : _c("div", { class: { hide: _vm.daniel } }, [
-                _c("p", [_vm._v("Your score is " + _vm._s(_vm.counter))])
-              ])
+            : _c("div", { class: { hide: _vm.daniel } })
         ])
-      : _c(
+      : _vm.showthebutton && _vm.playedskipped === 0
+      ? _c(
           "div",
           [
             _c("skippedquestions", {
@@ -41362,6 +41364,9 @@ var render = function() {
           ],
           1
         )
+      : _c("div", [
+          _c("p", [_vm._v("Your final score is  " + _vm._s(_vm.counter))])
+        ])
   ])
 }
 var staticRenderFns = []
