@@ -1,43 +1,41 @@
 <template>
-    <div>    
-        <p>This is timer componet</p>
-        <!-- <p>{{msg}} from test comp</p> -->
-        <p>{{num}} from hello comp</p>
-        <hello :msessage ="this.msg"></hello>
+<div>
+    <p>00:{{ timerCount }}</p>
+    <button v-on:click="daniel()">Reset</button>
     </div>
 </template>
 
 <script>
-import { bus } from "../app";
-//import test from "./test";
-import hello from "./hello";
-export default {
-    props:['msg', 'num'],
-        name:'timer',
- components:{
-     hello
- },
-data(){
-    return{
-    
 
+    export default {
+
+        data() {
+            return {
+                timerCount: 60
+            }
+        },
+
+        watch: {
+
+            timerCount: {
+                handler(value) {
+
+                    if (value > 0) {
+                        setTimeout(() => {
+                            this.timerCount--;
+                        }, 1000);
+                    }
+
+                },
+                immediate: true // This ensures the watcher is triggered upon creation
+            }
+
+        },
+        methods:{
+            daniel(){
+                this.timerCount =60;
+            }
+        }
     }
 
-},
-methods:{
-    // datatoemit(data){
-    //     this.other = data;
-
-    // }
-
-}
-
-
-}
 </script>
-
-<style scoped>
-
-
-
-</style>

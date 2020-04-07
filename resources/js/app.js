@@ -21,6 +21,8 @@ import test from './views/test.vue'
 import timer from './views/timer'
 import hello from './views/hello'
 
+
+
 const router = new VueRouter({
     mode: 'history',
     routes: [

@@ -59,11 +59,9 @@
           <button v-on:click="skip()" class="button btn-primary">Skip</button>
         </div>
       </div>
-      <div v-else v-bind:class="{hide:daniel}">
-        
-      </div>
+      <div v-else v-bind:class="{hide:daniel}"></div>
     </div>
-    <div v-else-if ="showthebutton && playedskipped === 0" >
+    <div v-else-if="showthebutton && playedskipped === 0">
       <skippedquestions
         :allques="this.results"
         :skipindex="skippedquestionz"
@@ -71,8 +69,8 @@
       ></skippedquestions>
     </div>
     <div v-else>
-      <p>Your final score is  {{counter}}</p>
-    </div>  
+      <p>Your final score is {{counter}}</p>
+    </div>
   </div>
 </template>
 
@@ -85,7 +83,7 @@ export default {
   props: ["useroptions"],
   name: "game",
   components: {
-    skippedquestions
+    skippedquestions,
   },
   data() {
     return {
@@ -110,7 +108,7 @@ export default {
       daniel: false,
       transfer: 0,
       showthebutton: 0,
-      playedskipped:0
+      playedskipped: 0,
     };
   },
   methods: {
@@ -174,7 +172,7 @@ export default {
       bus.$on("skippedquesfinal", data => {
         if (data) {
           this.results = data;
-          this.playedskipped =1;
+          this.playedskipped = 1;
           this.showthebutton = 0;
           console.log(this.results);
           this.gameover = 0;

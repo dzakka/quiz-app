@@ -1,5 +1,6 @@
 <template>
   <div>
+ 
     <p>This is hello component(parent)</p>
     <test :par="tochild" :ptochild="this.daniel"></test>
     <p>{{daniel}}</p>
@@ -11,19 +12,18 @@
 
 <script>
 import { bus } from "../app";
-
 import test from "./test";
 export default {
   name: "hello",
   //props:['ctoparent'],
   components: {
-    test
+    test,
   },
 
   data() {
     return {
       tochild: "This is a text from parent(hello comp) to child(test comp)",
-      daniel: ""
+      daniel: "",
     };
   },
   created() {
@@ -34,7 +34,7 @@ export default {
   methods: {
     change() {
       this.daniel = "this is daniel changed to daniel zakka from parent comp";
-    }
+    },
   }
 };
 </script>
