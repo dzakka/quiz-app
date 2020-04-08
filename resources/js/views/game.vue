@@ -71,11 +71,16 @@
     <div v-else>
       <p>Your final score is {{counter}}</p>
     </div>
+    <timer
+    :resetvalue="this.reset"
+    :gameover="this.gameover"
+    ></timer>
   </div>
 </template>
 
 <script>
 import skippedquestions from "./skippedquestions";
+import timer from "./timer";
 import { bus } from "../app";
 const opentdb = require("opentdb-api");
 
@@ -84,6 +89,7 @@ export default {
   name: "game",
   components: {
     skippedquestions,
+    timer
   },
   data() {
     return {
@@ -109,8 +115,11 @@ export default {
       transfer: 0,
       showthebutton: 0,
       playedskipped: 0,
+      cycle:0,
+      reset:0,
     };
   },
+
   methods: {
     next() {
       this.allans = [];
@@ -139,6 +148,7 @@ export default {
       return data.sort(data => 0.5 - Math.random());
     },
     skip() {
+      this.reset =1;
       this.skippedquestionz.push(this.index - 1);
       if (this.index != this.results.length) {
         this.next();
@@ -148,25 +158,39 @@ export default {
       }
     },
     score(data) {
+      this.reset =1;
       if (data === this.correct) {
         this.counter++;
         if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
-          this.showthebutton = 1;
+          this.showthebutton = 1
         }
       } else {
         if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
-          this.showthebutton = 1;
+          this.showthebutton = 1
         }
       }
     }
   },
+  mounted(){
+    bus.$on('CycleEvent',(data)=>{
+        this.cycle = data.cycleround;
+        this.reset = data.resetvalue;
 
+    });
+  },
+  watch:{
+      cycle(val){
+        if(val ===1){
+          this.next();
+        }
+      }
+  },
   created() {
     opentdb.getTrivia(this.options).then(result => {
       bus.$on("skippedquesfinal", data => {
@@ -181,6 +205,7 @@ export default {
         }
       });
       this.results = result;
+      console.log(this.results);
       this.round = 0;
       this.next();
 
