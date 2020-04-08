@@ -11,30 +11,23 @@
 import { bus } from "../app";
 export default {
   name: "timer",
-  props: ["resetvalue", "gameover"],
+  props: ['stoptimergame'],
   data() {
     return {
       elapsedTime: 0,
       timer: undefined,
-      cycle:1
+      automaticnext:0,
     };
   },
   watch:{
       elapsedTime(val){
-          if(this.elapsedTime >20000 || this.resetvalue === 1){
+          if(this.elapsedTime >60000){
               this.reset();
-              this.resetvalue =0;
-              bus.$emit('CycleEvent', {
-                 cycleround:this.cycle,
-                 resetvalue: this.resetvalue
-              })
-              
+              this.automaticnext =1;
+              bus.$emit('automaticnext', this.automaticnext);
           }
-          else if(this.gameover){
-              this.stop();
-          }
-
      },
+
      
   },
   computed: {

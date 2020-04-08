@@ -71,10 +71,7 @@
     <div v-else>
       <p>Your final score is {{counter}}</p>
     </div>
-    <timer
-    :resetvalue="this.reset"
-    :gameover="this.gameover"
-    ></timer>
+    <p>{{formattedElapsedTime}}</p>
   </div>
 </template>
 
@@ -88,8 +85,7 @@ export default {
   props: ["useroptions"],
   name: "game",
   components: {
-    skippedquestions,
-    timer
+    skippedquestions
   },
   data() {
     return {
@@ -115,12 +111,23 @@ export default {
       transfer: 0,
       showthebutton: 0,
       playedskipped: 0,
-      cycle:0,
-      reset:0,
+      elapsedTime: 0,
+      timer: undefined
     };
   },
 
   methods: {
+    start() {
+      this.timer = setInterval(() => {
+        this.elapsedTime += 1000;
+      }, 1000);
+    },
+    stop() {
+      clearInterval(this.timer);
+    },
+    reset() {
+      this.elapsedTime = 0;
+    },
     next() {
       this.allans = [];
       this.len = 0;
@@ -148,7 +155,7 @@ export default {
       return data.sort(data => 0.5 - Math.random());
     },
     skip() {
-      this.reset =1;
+      this.reset();
       this.skippedquestionz.push(this.index - 1);
       if (this.index != this.results.length) {
         this.next();
@@ -158,43 +165,47 @@ export default {
       }
     },
     score(data) {
-      this.reset =1;
+      this.reset();
       if (data === this.correct) {
         this.counter++;
         if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
-          this.showthebutton = 1
+          this.showthebutton = 1;
         }
       } else {
         if (this.index != this.results.length) {
           this.next();
         } else {
           this.gameover = 1;
-          this.showthebutton = 1
+          this.showthebutton = 1;
         }
       }
     }
   },
-  mounted(){
-    bus.$on('CycleEvent',(data)=>{
-        this.cycle = data.cycleround;
-        this.reset = data.resetvalue;
-
-    });
+  computed: {
+    formattedElapsedTime() {
+      const date = new Date(null);
+      date.setSeconds(this.elapsedTime / 1000);
+      const utc = date.toUTCString();
+      return utc.substr(utc.indexOf(":") - 2, 8);
+    }
   },
-  watch:{
-      cycle(val){
-        if(val ===1){
-          this.next();
-        }
+  mounted() {},
+  watch: {
+    elapsedTime(val) {
+      if (this.elapsedTime > 20000) {
+        this.reset();
+        this.next();
       }
+    }
   },
   created() {
     opentdb.getTrivia(this.options).then(result => {
       bus.$on("skippedquesfinal", data => {
         if (data) {
+          this.start();
           this.results = data;
           this.playedskipped = 1;
           this.showthebutton = 0;
@@ -207,6 +218,7 @@ export default {
       this.results = result;
       console.log(this.results);
       this.round = 0;
+      this.start();
       this.next();
 
       // console.log(this.results);

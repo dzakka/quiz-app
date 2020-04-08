@@ -2247,9 +2247,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -2260,8 +2257,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
   props: ["useroptions"],
   name: "game",
   components: {
-    skippedquestions: _skippedquestions__WEBPACK_IMPORTED_MODULE_0__["default"],
-    timer: _timer__WEBPACK_IMPORTED_MODULE_1__["default"]
+    skippedquestions: _skippedquestions__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
@@ -2287,11 +2283,24 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       transfer: 0,
       showthebutton: 0,
       playedskipped: 0,
-      cycle: 0,
-      reset: 0
+      elapsedTime: 0,
+      timer: undefined
     };
   },
   methods: {
+    start: function start() {
+      var _this = this;
+
+      this.timer = setInterval(function () {
+        _this.elapsedTime += 1000;
+      }, 1000);
+    },
+    stop: function stop() {
+      clearInterval(this.timer);
+    },
+    reset: function reset() {
+      this.elapsedTime = 0;
+    },
     next: function next() {
       this.allans = [];
       this.len = 0;
@@ -2321,7 +2330,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       });
     },
     skip: function skip() {
-      this.reset = 1;
+      this.reset();
       this.skippedquestionz.push(this.index - 1);
 
       if (this.index != this.results.length) {
@@ -2332,7 +2341,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       }
     },
     score: function score(data) {
-      this.reset = 1;
+      this.reset();
 
       if (data === this.correct) {
         this.counter++;
@@ -2353,17 +2362,19 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       }
     }
   },
-  mounted: function mounted() {
-    var _this = this;
-
-    _app__WEBPACK_IMPORTED_MODULE_2__["bus"].$on('CycleEvent', function (data) {
-      _this.cycle = data.cycleround;
-      _this.reset = data.resetvalue;
-    });
+  computed: {
+    formattedElapsedTime: function formattedElapsedTime() {
+      var date = new Date(null);
+      date.setSeconds(this.elapsedTime / 1000);
+      var utc = date.toUTCString();
+      return utc.substr(utc.indexOf(":") - 2, 8);
+    }
   },
+  mounted: function mounted() {},
   watch: {
-    cycle: function cycle(val) {
-      if (val === 1) {
+    elapsedTime: function elapsedTime(val) {
+      if (this.elapsedTime > 20000) {
+        this.reset();
         this.next();
       }
     }
@@ -2374,6 +2385,8 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
     opentdb.getTrivia(this.options).then(function (result) {
       _app__WEBPACK_IMPORTED_MODULE_2__["bus"].$on("skippedquesfinal", function (data) {
         if (data) {
+          _this2.start();
+
           _this2.results = data;
           _this2.playedskipped = 1;
           _this2.showthebutton = 0;
@@ -2387,6 +2400,8 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       _this2.results = result;
       console.log(_this2.results);
       _this2.round = 0;
+
+      _this2.start();
 
       _this2.next(); // console.log(this.results);
 
@@ -2562,25 +2577,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "timer",
-  props: ["resetvalue", "gameover"],
+  props: ['stoptimergame'],
   data: function data() {
     return {
       elapsedTime: 0,
       timer: undefined,
-      cycle: 1
+      automaticnext: 0
     };
   },
   watch: {
     elapsedTime: function elapsedTime(val) {
-      if (this.elapsedTime > 20000 || this.resetvalue === 1) {
+      if (this.elapsedTime > 60000) {
         this.reset();
-        this.resetvalue = 0;
-        _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$emit('CycleEvent', {
-          cycleround: this.cycle,
-          resetvalue: this.resetvalue
-        });
-      } else if (this.gameover) {
-        this.stop();
+        this.automaticnext = 1;
+        _app__WEBPACK_IMPORTED_MODULE_0__["bus"].$emit('automaticnext', this.automaticnext);
       }
     }
   },
@@ -41241,205 +41251,196 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { attrs: { id: "main-div-game" } },
-    [
-      !_vm.showthebutton
-        ? _c("div", [
-            !_vm.gameover || _vm.playedskipped === 1
-              ? _c("div", [
-                  _c("div", [
-                    _c("p", [_vm._v("score:" + _vm._s(_vm.counter))])
-                  ]),
-                  _vm._v(" "),
-                  _vm.len > 2
-                    ? _c("div", [
+  return _c("div", { attrs: { id: "main-div-game" } }, [
+    !_vm.showthebutton
+      ? _c("div", [
+          !_vm.gameover || _vm.playedskipped === 1
+            ? _c("div", [
+                _c("div", [_c("p", [_vm._v("score:" + _vm._s(_vm.counter))])]),
+                _vm._v(" "),
+                _vm.len > 2
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "list-group-item list-group-item-action active",
+                          attrs: { type: "button" }
+                        },
+                        [_vm._v(_vm._s(_vm.result.question))]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "list-group" }, [
                         _c(
                           "button",
                           {
                             staticClass:
-                              "list-group-item list-group-item-action active",
-                            attrs: { type: "button" }
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[0])
+                              }
+                            }
                           },
-                          [_vm._v(_vm._s(_vm.result.question))]
+                          [_vm._v(_vm._s(_vm.result.ans[0]))]
                         ),
                         _vm._v(" "),
-                        _c("div", { staticClass: "list-group" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "list-group-item list-group-item-action",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.score(_vm.result.ans[0])
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm.result.ans[0]))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "list-group-item list-group-item-action",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.score(_vm.result.ans[1])
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm.result.ans[1]))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "list-group-item list-group-item-action",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.score(_vm.result.ans[2])
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm.result.ans[2]))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "list-group-item list-group-item-action",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.score(_vm.result.ans[3])
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm.result.ans[3]))]
-                          )
-                        ])
-                      ])
-                    : _c("div", [
                         _c(
                           "button",
                           {
                             staticClass:
-                              "list-group-item list-group-item-action active",
-                            attrs: { type: "button" }
-                          },
-                          [_vm._v(_vm._s(_vm.result.question))]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "list-group" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "list-group-item list-group-item-action",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.score(_vm.result.ans[0])
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm.result.ans[0]))]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "list-group-item list-group-item-action",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.score(_vm.result.ans[1])
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(_vm.result.ans[1]))]
-                          )
-                        ])
-                      ]),
-                  _vm._v(" "),
-                  _vm.index === _vm.results.length
-                    ? _c("div", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "button btn-primary",
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
                             on: {
                               click: function($event) {
-                                return _vm.skip(_vm.result)
+                                return _vm.score(_vm.result.ans[1])
                               }
                             }
                           },
-                          [_vm._v("Skip")]
-                        )
-                      ])
-                    : _c("div", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "button btn-primary",
-                            on: {
-                              click: function($event) {
-                                return _vm.next()
-                              }
-                            }
-                          },
-                          [_vm._v("Next Question")]
+                          [_vm._v(_vm._s(_vm.result.ans[1]))]
                         ),
                         _vm._v(" "),
                         _c(
                           "button",
                           {
-                            staticClass: "button btn-primary",
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
                             on: {
                               click: function($event) {
-                                return _vm.skip()
+                                return _vm.score(_vm.result.ans[2])
                               }
                             }
                           },
-                          [_vm._v("Skip")]
+                          [_vm._v(_vm._s(_vm.result.ans[2]))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[3])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[3]))]
                         )
                       ])
-                ])
-              : _c("div", { class: { hide: _vm.daniel } })
-          ])
-        : _vm.showthebutton && _vm.playedskipped === 0
-        ? _c(
-            "div",
-            [
-              _c("skippedquestions", {
-                attrs: {
-                  allques: this.results,
-                  skipindex: _vm.skippedquestionz,
-                  scorefromgame: _vm.counter
-                }
-              })
-            ],
-            1
-          )
-        : _c("div", [
-            _c("p", [_vm._v("Your final score is " + _vm._s(_vm.counter))])
-          ]),
-      _vm._v(" "),
-      _c("timer", {
-        attrs: { resetvalue: this.reset, gameover: this.gameover }
-      })
-    ],
-    1
-  )
+                    ])
+                  : _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "list-group-item list-group-item-action active",
+                          attrs: { type: "button" }
+                        },
+                        [_vm._v(_vm._s(_vm.result.question))]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "list-group" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[0])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[0]))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "list-group-item list-group-item-action",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.score(_vm.result.ans[1])
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm.result.ans[1]))]
+                        )
+                      ])
+                    ]),
+                _vm._v(" "),
+                _vm.index === _vm.results.length
+                  ? _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.skip(_vm.result)
+                            }
+                          }
+                        },
+                        [_vm._v("Skip")]
+                      )
+                    ])
+                  : _c("div", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.next()
+                            }
+                          }
+                        },
+                        [_vm._v("Next Question")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.skip()
+                            }
+                          }
+                        },
+                        [_vm._v("Skip")]
+                      )
+                    ])
+              ])
+            : _c("div", { class: { hide: _vm.daniel } })
+        ])
+      : _vm.showthebutton && _vm.playedskipped === 0
+      ? _c(
+          "div",
+          [
+            _c("skippedquestions", {
+              attrs: {
+                allques: this.results,
+                skipindex: _vm.skippedquestionz,
+                scorefromgame: _vm.counter
+              }
+            })
+          ],
+          1
+        )
+      : _c("div", [
+          _c("p", [_vm._v("Your final score is " + _vm._s(_vm.counter))])
+        ]),
+    _vm._v(" "),
+    _c("p", [_vm._v(_vm._s(_vm.formattedElapsedTime))])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -57213,15 +57214,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************!*\
   !*** ./resources/js/views/game.vue ***!
   \*************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_vue_vue_type_template_id_7dc67e71_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game.vue?vue&type=template&id=7dc67e71&scoped=true& */ "./resources/js/views/game.vue?vue&type=template&id=7dc67e71&scoped=true&");
 /* harmony import */ var _game_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game.vue?vue&type=script&lang=js& */ "./resources/js/views/game.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _game_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _game_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -57251,7 +57251,7 @@ component.options.__file = "resources/js/views/game.vue"
 /*!**************************************************************!*\
   !*** ./resources/js/views/game.vue?vue&type=script&lang=js& ***!
   \**************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
