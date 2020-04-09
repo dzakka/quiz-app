@@ -61,7 +61,7 @@
       </div>
       <div v-else v-bind:class="{hide:daniel}"></div>
     </div>
-    <div v-else-if="showthebutton && playedskipped === 0">
+    <div v-else-if="(showthebutton) && (playedskipped === 0) && (skippedquestionz.length>0)">
       <skippedquestions
         :allques="this.results"
         :skipindex="skippedquestionz"
@@ -199,6 +199,11 @@ export default {
       if (this.elapsedTime > 20000) {
         this.reset();
         this.next();
+      }
+    },
+    playedskipped(val){
+      if(this.playedskipped === 1 && this.showthebutton !=1){
+        this.stop();
       }
     }
   },

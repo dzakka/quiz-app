@@ -2378,6 +2378,11 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         this.reset();
         this.next();
       }
+    },
+    playedskipped: function playedskipped(val) {
+      if (this.playedskipped === 1 && this.showthebutton != 1) {
+        this.stop();
+      }
     }
   },
   created: function created() {
@@ -41419,7 +41424,9 @@ var render = function() {
               ])
             : _c("div", { class: { hide: _vm.daniel } })
         ])
-      : _vm.showthebutton && _vm.playedskipped === 0
+      : _vm.showthebutton &&
+        _vm.playedskipped === 0 &&
+        _vm.skippedquestionz.length > 0
       ? _c(
           "div",
           [
