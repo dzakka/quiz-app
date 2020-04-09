@@ -2351,6 +2351,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         } else {
           this.gameover = 1;
           this.showthebutton = 1;
+          this.stop();
         }
       } else {
         if (this.index != this.results.length) {
@@ -2358,6 +2359,7 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         } else {
           this.gameover = 1;
           this.showthebutton = 1;
+          this.stop();
         }
       }
     }
@@ -2370,7 +2372,6 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
       return utc.substr(utc.indexOf(":") - 2, 8);
     }
   },
-  mounted: function mounted() {},
   watch: {
     elapsedTime: function elapsedTime(val) {
       if (this.elapsedTime > 20000) {
@@ -2390,7 +2391,6 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
           _this2.results = data;
           _this2.playedskipped = 1;
           _this2.showthebutton = 0;
-          console.log(_this2.results);
           _this2.gameover = 0;
           _this2.index = 0;
 
@@ -2398,13 +2398,11 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         }
       });
       _this2.results = result;
-      console.log(_this2.results);
       _this2.round = 0;
 
       _this2.start();
 
-      _this2.next(); // console.log(this.results);
-
+      _this2.next();
     });
     opentdb.getQuestionCount(this.options.category).then(function (result) {
       _this2.totalcount = result;

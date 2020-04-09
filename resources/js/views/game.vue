@@ -173,6 +173,7 @@ export default {
         } else {
           this.gameover = 1;
           this.showthebutton = 1;
+          this.stop();
         }
       } else {
         if (this.index != this.results.length) {
@@ -180,6 +181,7 @@ export default {
         } else {
           this.gameover = 1;
           this.showthebutton = 1;
+          this.stop();
         }
       }
     }
@@ -192,7 +194,6 @@ export default {
       return utc.substr(utc.indexOf(":") - 2, 8);
     }
   },
-  mounted() {},
   watch: {
     elapsedTime(val) {
       if (this.elapsedTime > 20000) {
@@ -209,19 +210,15 @@ export default {
           this.results = data;
           this.playedskipped = 1;
           this.showthebutton = 0;
-          console.log(this.results);
           this.gameover = 0;
           this.index = 0;
           this.next();
         }
       });
       this.results = result;
-      console.log(this.results);
       this.round = 0;
       this.start();
       this.next();
-
-      // console.log(this.results);
     });
     opentdb.getQuestionCount(this.options.category).then(result => {
       this.totalcount = result;
