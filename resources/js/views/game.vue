@@ -201,8 +201,8 @@ export default {
         this.next();
       }
     },
-    playedskipped(val){
-      if(this.playedskipped === 1 && this.showthebutton !=1){
+    showthebutton(val){
+      if(this.playedskipped === 0 && this.showthebutton ===1){
         this.stop();
       }
     }

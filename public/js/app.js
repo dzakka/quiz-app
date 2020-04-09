@@ -2074,12 +2074,84 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api/index.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'categories',
+  name: "categories",
   data: function data() {
     return {
       categories: {}
@@ -2379,8 +2451,8 @@ var opentdb = __webpack_require__(/*! opentdb-api */ "./node_modules/opentdb-api
         this.next();
       }
     },
-    playedskipped: function playedskipped(val) {
-      if (this.playedskipped === 1 && this.showthebutton != 1) {
+    showthebutton: function showthebutton(val) {
+      if (this.playedskipped === 0 && this.showthebutton === 1) {
         this.stop();
       }
     }
@@ -40678,7 +40750,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("General Knowledge"),
+            _vm._v("\n      General Knowledge\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -40697,7 +40769,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Boooks "),
+            _vm._v("\n      Boooks\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book fa-3x" })
@@ -40716,10 +40788,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Film"),
+            _vm._v("\n      Film\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-photo-video fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40735,10 +40807,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Music"),
+            _vm._v("\n      Music\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-music fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40754,10 +40826,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Musicals & Theatres"),
+            _vm._v("\n      Musicals & Theatres\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-theater-masks fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40773,10 +40845,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Television"),
+            _vm._v("\n      Television\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-tv fa-3x" })
           ]
         )
       ]
@@ -40798,10 +40870,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Video Games"),
+            _vm._v("\n      Video Games\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-gamepad fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40817,10 +40889,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Board Games"),
+            _vm._v("\n      Board Games\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-chess-rook fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40836,10 +40908,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Science & Nature"),
+            _vm._v("\n      Science & Nature\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-leaf fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40855,10 +40927,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Computers"),
+            _vm._v("\n      Computers\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-laptop-code fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40874,10 +40946,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Mathematics"),
+            _vm._v("\n      Mathematics\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fas fa-square-root-alt fa-3x" })
           ]
         ),
         _vm._v(" "),
@@ -40893,10 +40965,10 @@ var render = function() {
             }
           },
           [
-            _vm._v("Mythology"),
+            _vm._v("\n      Mythology\n      "),
             _c("br"),
             _vm._v(" "),
-            _c("i", { staticClass: "fas fa-book-reader fa-3x" })
+            _c("i", { staticClass: "fab fa-pied-piper-alt fa-3x" })
           ]
         )
       ]
@@ -40918,7 +40990,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Sports"),
+            _vm._v("\n      Sports\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -40937,7 +41009,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Geography"),
+            _vm._v("\n      Geography\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -40956,7 +41028,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("History"),
+            _vm._v("\n      History\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -40975,7 +41047,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Politics"),
+            _vm._v("\n      Politics\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -40994,7 +41066,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Art"),
+            _vm._v("\n      Art\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41013,7 +41085,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Celebrities"),
+            _vm._v("\n      Celebrities\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41038,7 +41110,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Animals"),
+            _vm._v("\n      Animals\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41057,7 +41129,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Vehicles"),
+            _vm._v("\n      Vehicles\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41076,7 +41148,7 @@ var render = function() {
             }
           },
           [
-            _vm._v(" Comics"),
+            _vm._v("\n      Comics\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41095,7 +41167,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Gadgets"),
+            _vm._v("\n      Gadgets\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41114,7 +41186,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Japanese Anime & Manga"),
+            _vm._v("\n      Japanese Anime & Manga\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41133,7 +41205,7 @@ var render = function() {
             }
           },
           [
-            _vm._v("Cartoon & Animations"),
+            _vm._v("\n      Cartoon & Animations\n      "),
             _c("br"),
             _vm._v(" "),
             _c("i", { staticClass: "fas fa-book-reader fa-3x" })
@@ -41523,6 +41595,7 @@ var render = function() {
     _c(
       "button",
       {
+        staticClass: "btn btn-primary",
         on: {
           click: function($event) {
             return _vm.playagain()

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-on:click="playagain()">Do you want to play the skipped questions</button>
+    <button class="btn btn-primary" v-on:click="playagain()">Do you want to play the skipped questions</button>
   </div>
 </template>
 
@@ -15,13 +15,11 @@ export default {
       allskip: [],
       allquestions: [],
       skipques: {},
-      counter: "",
+      counter: ""
     };
   },
-  created() {
-      
-  },
-  methods: {                                                                                                                                                                                  
+  created() {},
+  methods: {
     playagain() {
       this.allquestions = Object.entries(this.allques).map(e => e[1]);
       this.skipques = this.skipindex;
