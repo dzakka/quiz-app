@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Route;
      return view('quiz');
 });
 
+
 Route::get('/{any}', 'QuizController@index')->where('any', '.*');
+
+
 
 Auth::routes();
 

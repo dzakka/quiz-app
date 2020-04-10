@@ -1,0 +1,22 @@
+.score-timer{
+    display:flex;
+    justify-content: space-between;
+    margin-bottom:1rem;
+    .score{
+
+        width:40%;
+        background-color:map-get($theme-colors,olympic);
+        padding:0.2rem;
+        border-radius: 0.3rem;
+        color:white;
+    }
+    .timer{
+        width:40%;
+        background-color:map-get($theme-colors ,independence);
+        color:white;
+        border-radius: 0.3rem;
+        padding:0.2rem;
+    }
+
+}
+

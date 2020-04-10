@@ -8,6 +8,28 @@
   color: white !important;
 }
 
+.score-timer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.score-timer .score {
+  width: 40%;
+  background-color: #008ECC;
+  padding: 0.2rem;
+  border-radius: 0.3rem;
+  color: white;
+}
+
+.score-timer .timer {
+  width: 40%;
+  background-color: #4c516d;
+  color: white;
+  border-radius: 0.3rem;
+  padding: 0.2rem;
+}
+
 /*!
  * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)

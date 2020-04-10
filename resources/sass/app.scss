@@ -4,6 +4,7 @@
 
 // Variables
 @import 'variables';
+@import 'score';
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 
@@ -18,4 +19,9 @@ $fa-font-path: "../webfonts";
 
 .hide{
     display:none;
+}
+
+.score{
+
+
 }

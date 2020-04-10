@@ -2327,6 +2327,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -41468,10 +41475,32 @@ var render = function() {
       ? _c("div", [
           !_vm.gameover || _vm.playedskipped === 1
             ? _c("div", [
-                _c("div", [
-                  _c("p", [_vm._v("score:" + _vm._s(_vm.counter))]),
+                _c("div", { staticClass: "score-timer" }, [
+                  _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        _vm._s(_vm.index) + " /" + _vm._s(_vm.results.length)
+                      )
+                    ])
+                  ]),
                   _vm._v(" "),
-                  _c("p", [_vm._v(_vm._s(_vm.formattedElapsedTime))])
+                  _c("div", { staticClass: "score" }, [
+                    _c("p", [
+                      _vm._v(
+                        "score: " +
+                          _vm._s(_vm.counter) +
+                          "/ " +
+                          _vm._s(_vm.results.length)
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "timer" }, [
+                    _c("p", [
+                      _c("i", { staticClass: "fas fa-hourglass-half fa-2x" }),
+                      _vm._v(" " + _vm._s(_vm.formattedElapsedTime))
+                    ])
+                  ])
                 ]),
                 _vm._v(" "),
                 _vm.len > 2

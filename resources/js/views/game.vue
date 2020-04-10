@@ -2,9 +2,16 @@
   <div id="main-div-game">
     <div v-if="!showthebutton">
       <div v-if="!gameover || playedskipped === 1">
-        <div>
-          <p>score:{{counter}}</p>
-          <p>{{formattedElapsedTime}}</p>
+        <div class="score-timer">
+          <div>
+            <p>{{index}} /{{results.length}}</p>
+          </div>  
+          <div class="score">
+            <p>score: {{counter}}/ {{results.length}}</p>
+          </div>
+          <div class="timer">
+          <p><i class="fas fa-hourglass-half fa-2x"></i> {{formattedElapsedTime}}</p>
+          </div>
         </div>
         <div v-if="len>2">
           <button
