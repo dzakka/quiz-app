@@ -4,32 +4,42 @@
       <div v-if="!gameover || playedskipped === 1">
         <div>
           <p>score:{{counter}}</p>
+          <p>{{formattedElapsedTime}}</p>
         </div>
         <div v-if="len>2">
           <button
             type="button"
             class="list-group-item list-group-item-action active"
+            v-bind:class="ScoreClass"
           >{{result.question}}</button>
           <div class="list-group">
             <button
               type="button"
               v-on:click="score(result.ans[0])"
               class="list-group-item list-group-item-action"
+              v-bind:class="ScoreClass"
+              id="option1"
             >{{result.ans[0]}}</button>
             <button
               type="button"
               v-on:click="score(result.ans[1])"
               class="list-group-item list-group-item-action"
+              v-bind:class="ScoreClass"
+              id="option2"
             >{{result.ans[1]}}</button>
             <button
               type="button"
               v-on:click="score(result.ans[2])"
               class="list-group-item list-group-item-action"
+              v-bind:class="ScoreClass"
+              id="option3"
             >{{result.ans[2]}}</button>
             <button
               type="button"
               v-on:click="score(result.ans[3])"
               class="list-group-item list-group-item-action"
+              v-bind:class="ScoreClass"
+              id="option4"
             >{{result.ans[3]}}</button>
           </div>
         </div>
@@ -43,11 +53,13 @@
               type="button"
               v-on:click="score(result.ans[0])"
               class="list-group-item list-group-item-action"
+              v-bind:class="ScoreClass"
             >{{result.ans[0]}}</button>
             <button
               type="button"
               v-on:click="score(result.ans[1])"
               class="list-group-item list-group-item-action"
+              v-bind:class="ScoreClass"
             >{{result.ans[1]}}</button>
           </div>
         </div>
@@ -55,7 +67,6 @@
           <button v-on:click="skip(result)" class="button btn-primary">Skip</button>
         </div>
         <div v-else>
-          <button v-on:click="next()" class="button btn-primary">Next Question</button>
           <button v-on:click="skip()" class="button btn-primary">Skip</button>
         </div>
       </div>
@@ -71,7 +82,6 @@
     <div v-else>
       <p>Your final score is {{counter}}</p>
     </div>
-    <p>{{formattedElapsedTime}}</p>
   </div>
 </template>
 
@@ -112,7 +122,9 @@ export default {
       showthebutton: 0,
       playedskipped: 0,
       elapsedTime: 0,
-      timer: undefined
+      timer: undefined,
+      correctanswer:false,
+      wronganswer:false,
     };
   },
 
@@ -192,17 +204,30 @@ export default {
       date.setSeconds(this.elapsedTime / 1000);
       const utc = date.toUTCString();
       return utc.substr(utc.indexOf(":") - 2, 8);
+    },
+    ScoreClass() {
+      return{
+        CorrectAnswer:this.correctanswer,
+        WrongAnswer:this.wronganswer,
+      }
     }
   },
   watch: {
     elapsedTime(val) {
-      if (this.elapsedTime > 20000) {
+      if (this.elapsedTime > 20000 && this.index != this.results.length) {
         this.reset();
         this.next();
+      } else if (
+        this.elapsedTime > 20000 &&
+        this.index === this.results.length
+      ) {
+        this.reset();
+        this.stop();
+        this.score();
       }
     },
-    showthebutton(val){
-      if(this.playedskipped === 0 && this.showthebutton ===1){
+    showthebutton(val) {
+      if (this.playedskipped === 0 && this.showthebutton === 1) {
         this.stop();
       }
     }
@@ -234,4 +259,12 @@ export default {
 
 
 <style  lang="scss" scoped>
+
+.CorrectAnswer{
+  background:green;
+}
+.WrongAnswer{
+  background:red;
+}
+
 </style>

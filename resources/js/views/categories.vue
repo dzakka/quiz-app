@@ -145,15 +145,12 @@ export default {
   },
   methods: {
     categoryuser(id) {
-      //     bus.$emit('categoryid' ,id);
-      //     console.log('emitted');
       this.$router.push(`/difficulty/${id}`);
     }
   },
   created() {
     opentdb.getCategories().then(result => {
       this.categories = result;
-      // console.log(this.categories);
     });
   }
 };
